@@ -6,8 +6,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
 def judul(doc, teks, level):
-    h = doc.add_heading(teks, level=level)
-    return h
+    return doc.add_heading(teks, level=level)
 
 
 def par(doc, teks):
@@ -83,12 +82,15 @@ judul(doc, "2. LANGKAH-LANGKAH PEMBUATAN PROGRAM", 1)
 judul(doc, "A. Menyiapkan Dataset", 2)
 par(doc, "Dataset yang digunakan pada praktikum ini berisi data kondisi sosial-ekonomi dari "
     "205 kabupaten/kota di Indonesia. Data bersumber dari Badan Pusat Statistik (BPS), yaitu "
-    "empat komponen penyusun Indeks Pembangunan Manusia (IPM) Metode Baru: Umur Harapan Hidup "
-    "(UHH), Harapan Lama Sekolah (HLS), Rata-rata Lama Sekolah (RLS), dan Pengeluaran per Kapita "
-    "Disesuaikan. Keempat variabel tersebut mencerminkan aspek kesehatan, pendidikan, dan "
-    "ekonomi suatu daerah, sehingga cocok digunakan untuk mengelompokkan tingkat kerentanan "
-    "sosial-ekonomi antar wilayah.")
-sisip(doc, "Sisipkan screenshot dataset (Kesejahteraan_Daerah.xlsx) di sini - Gambar 4.1")
+    "empat komponen penyusun Indeks Pembangunan Manusia (IPM) Metode Baru per kabupaten/kota: "
+    "Umur Harapan Hidup (UHH), Harapan Lama Sekolah (HLS), Rata-rata Lama Sekolah (RLS), dan "
+    "Pengeluaran per Kapita Disesuaikan. Keempat variabel tersebut mencerminkan aspek kesehatan, "
+    "pendidikan, dan ekonomi suatu daerah, sehingga cocok digunakan untuk mengelompokkan tingkat "
+    "kerentanan sosial-ekonomi antar wilayah.")
+par(doc, "Dataset disiapkan dalam dua versi: versi belum di-encode (kategori kerentanan berupa "
+    "teks: Rentan, Berkembang, Sejahtera) dan versi sudah di-encode (kategori berupa angka: 0, "
+    "1, 2). Versi angka inilah yang digunakan sebagai target pada proses klasifikasi.")
+sisip(doc, "Sisipkan screenshot dataset (Dataset_Awal_TanpaTarget.xlsx) di sini - Gambar 4.1")
 
 judul(doc, "B. Instalasi dan Memuat Data", 2)
 par(doc, "Program dibangun menggunakan bahasa Python dengan bantuan pustaka pandas, "
@@ -100,7 +102,7 @@ sisip(doc, "Sisipkan screenshot Source Code Proses Klustering K-Means - Gambar 4
 par(doc, "Hasil klustering divisualisasikan dalam bentuk scatter plot dengan sumbu Rata-rata "
     "Lama Sekolah dan Pengeluaran per Kapita (dalam bentuk standarisasi). Warna yang berbeda "
     "menunjukkan kluster yang berbeda. Dataset yang telah diberi label kluster kemudian disimpan "
-    "ke file KesejahteraanKluster.xlsx.")
+    "ke dalam dua file (versi teks dan versi angka).")
 sisip(doc, "Sisipkan screenshot grafik hasil klustering (hasil_klustering.png) - Gambar 4.3")
 par(doc, "Setelah klustering selesai, data dibaca kembali lalu dipisahkan menjadi variabel "
     "input (X) berisi empat kolom numerik, dan label (Y) berisi kolom kluster. Data dibagi "
@@ -123,16 +125,10 @@ hdr = tabel.rows[0].cells
 hdr[0].text = "Kluster"
 hdr[1].text = "Kategori"
 hdr[2].text = "Jumlah Daerah"
-isi = [
-    ("0", "Rentan", "102"),
-    ("1", "Berkembang", "66"),
-    ("2", "Sejahtera", "37"),
-]
-for i, (a, b, c) in enumerate(isi, start=1):
+for i, (a, b, c) in enumerate([("0", "Rentan", "102"), ("1", "Berkembang", "66"),
+                               ("2", "Sejahtera", "37")], start=1):
     sel = tabel.rows[i].cells
-    sel[0].text = a
-    sel[1].text = b
-    sel[2].text = c
+    sel[0].text, sel[1].text, sel[2].text = a, b, c
 par(doc, "Kluster Rentan berisi daerah dengan angka harapan hidup, lama sekolah, dan "
     "pengeluaran per kapita yang relatif rendah; kluster Berkembang berada pada tingkat "
     "menengah; sedangkan kluster Sejahtera memuat daerah dengan indikator sosial-ekonomi paling "
@@ -151,41 +147,38 @@ h2 = tabel2.rows[0].cells
 h2[0].text = "Algoritma"
 h2[1].text = "Akurasi"
 h2[2].text = "Keterangan"
-isi2 = [
-    ("Naive Bayes", "95,12%", "39 benar, 2 salah"),
-    ("Support Vector Machine (SVM)", "95,12%", "39 benar, 2 salah"),
-    ("Random Forest", "95,12%", "39 benar, 2 salah"),
-]
-for i, (a, b, c) in enumerate(isi2, start=1):
+for i, (a, b, c) in enumerate([("Naive Bayes", "95,12%", "39 benar, 2 salah"),
+                               ("Support Vector Machine (SVM)", "95,12%", "39 benar, 2 salah"),
+                               ("Random Forest", "95,12%", "39 benar, 2 salah")], start=1):
     sel = tabel2.rows[i].cells
-    sel[0].text = a
-    sel[1].text = b
-    sel[2].text = c
+    sel[0].text, sel[1].text, sel[2].text = a, b, c
 par(doc, "Berdasarkan hasil pengujian, ketiga algoritma memberikan tingkat akurasi yang sama, "
     "yaitu 95,12%, dengan 39 dari 41 data uji berhasil diprediksi dengan benar. Hal ini "
-    "menunjukkan bahwa kluster yang terbentuk dari K-Means cukup terpisah dengan baik, sehingga "
-    "mudah dikenali oleh berbagai model klasifikasi. Meskipun nilai akurasinya sama, ketiga "
-    "algoritma memiliki karakteristik berbeda: Naive Bayes unggul dari sisi kesederhanaan dan "
-    "kecepatan, SVM baik dalam memisahkan kelas dengan margin yang jelas, sedangkan Random "
-    "Forest lebih tahan terhadap data yang kompleks karena menggabungkan banyak pohon keputusan.")
+    "menunjukkan bahwa kluster yang terbentuk dari K-Means cukup terpisah dengan baik sehingga "
+    "mudah dikenali oleh berbagai model klasifikasi. Meskipun akurasinya sama, ketiga algoritma "
+    "memiliki karakteristik berbeda: Naive Bayes unggul dari sisi kesederhanaan dan kecepatan, "
+    "SVM baik dalam memisahkan kelas dengan margin yang jelas, sedangkan Random Forest tahan "
+    "terhadap data kompleks karena menggabungkan banyak pohon keputusan.")
 sisip(doc, "Sisipkan screenshot Classification Report Naive Bayes, Random Forest, dan SVM - Gambar 4.6")
 
 # ============================================================
 judul(doc, "4. KESIMPULAN", 1)
 par(doc, "Berdasarkan hasil praktikum, algoritma K-Means berhasil mengelompokkan 205 "
     "kabupaten/kota di Indonesia menjadi 3 kluster tingkat kerentanan sosial-ekonomi, yaitu "
-    "Rentan, Berkembang, dan Sejahtera, berdasarkan komponen IPM (UHH, HLS, RLS, dan Pengeluaran "
-    "per Kapita) dari data BPS. Label kluster tersebut kemudian digunakan sebagai target pada "
-    "proses klasifikasi menggunakan Naive Bayes, Random Forest, dan Support Vector Machine "
-    "(SVM). Ketiga algoritma memperoleh akurasi yang sama sebesar 95,12%, yang menandakan bahwa "
-    "hasil klustering sudah cukup baik dan konsisten. Praktikum ini membantu memahami bagaimana "
-    "metode unsupervised learning (klustering) dapat dipadukan dengan metode klasifikasi untuk "
-    "menganalisis dan memetakan kondisi sosial-ekonomi daerah.")
+    "Rentan (102 daerah), Berkembang (66 daerah), dan Sejahtera (37 daerah), berdasarkan empat "
+    "komponen IPM (UHH, HLS, RLS, dan Pengeluaran per Kapita) dari data BPS. Label kluster "
+    "tersebut kemudian digunakan sebagai target pada proses klasifikasi menggunakan Naive Bayes, "
+    "Random Forest, dan Support Vector Machine (SVM). Ketiga algoritma memperoleh akurasi yang "
+    "sama sebesar 95,12%, yang menandakan hasil klustering sudah cukup baik dan konsisten. "
+    "Praktikum ini membantu memahami bagaimana metode unsupervised learning (klustering) dapat "
+    "dipadukan dengan metode klasifikasi untuk menganalisis dan memetakan kondisi sosial-ekonomi "
+    "daerah.")
 
 par(doc, "")
 p = doc.add_paragraph()
-r = p.add_run("Sumber data: Badan Pusat Statistik (BPS) - Indeks Pembangunan Manusia Metode Baru "
-              "menurut Kabupaten/Kota, www.bps.go.id (UHH 2024; HLS, RLS, Pengeluaran per Kapita 2025).")
+r = p.add_run("Sumber data: Badan Pusat Statistik (BPS), www.bps.go.id - Komponen Indeks "
+              "Pembangunan Manusia Metode Baru menurut Kabupaten/Kota (UHH 2024; HLS, RLS, "
+              "Pengeluaran per Kapita 2025).")
 r.italic = True
 r.font.size = Pt(9)
 

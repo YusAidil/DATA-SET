@@ -225,19 +225,18 @@ def main():
     for line in DATA.strip().splitlines():
         prov, nama, uhh, hls, rls, peng = line.split("|")
         rows.append({
-            "Provinsi": prov,
-            "Kabupaten/Kota": nama,
+            "Kabupaten/Kota": f"{nama}, {prov}",
             "Umur Harapan Hidup (Tahun)": float(uhh),
             "Harapan Lama Sekolah (Tahun)": float(hls),
             "Rata-rata Lama Sekolah (Tahun)": float(rls),
             "Pengeluaran per Kapita (Ribu Rupiah)": int(peng),
         })
     df = pd.DataFrame(rows)
-    df.to_excel("Kesejahteraan_Daerah.xlsx", index=False)
+    df.to_excel("Dataset_Awal_TanpaTarget.xlsx", index=False)
     print("Jumlah baris :", len(df))
     print("Jumlah kolom :", df.shape[1])
     print(df.head(10).to_string(index=False))
-    print("\nFile disimpan: Kesejahteraan_Daerah.xlsx")
+    print("\nFile disimpan: Dataset_Awal_TanpaTarget.xlsx")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,43 @@
+========================================================================
+SUMBER DATA
+Klasterisasi Tingkat Kerentanan Sosial-Ekonomi Kabupaten/Kota di Indonesia
+========================================================================
+
+Seluruh data berasal dari BADAN PUSAT STATISTIK (BPS) - www.bps.go.id
+yaitu 4 komponen penyusun Indeks Pembangunan Manusia (IPM) Metode Baru,
+disajikan per kabupaten/kota.
+
+Jumlah data : 205 kabupaten/kota
+File input  : Dataset_Awal_TanpaTarget.xlsx
+
+------------------------------------------------------------------------
+VARIABEL DAN LINK SUMBER
+------------------------------------------------------------------------
+
+1. Umur Harapan Hidup Saat Lahir (UHH) - Tahun 2024
+   https://www.bps.go.id/indicator/26/414/1/umur-harapan-hidup-saat-lahir-uhh-.html
+
+2. Harapan Lama Sekolah (HLS) - Tahun 2025
+   https://www.bps.go.id/indicator/26/417/1/harapan-lama-sekolah.html
+
+3. Rata-rata Lama Sekolah (RLS) - Tahun 2025
+   https://www.bps.go.id/indicator/26/415/1/rata-rata-lama-sekolah.html
+
+4. Pengeluaran per Kapita Disesuaikan (Ribu Rupiah/Orang/Tahun) - Tahun 2025
+   https://www.bps.go.id/indicator/26/416/1/pengeluaran-per-kapita-disesuaikan.html
+
+(Referensi tambahan - nilai IPM gabungan per kabupaten/kota, Tahun 2024)
+   https://www.bps.go.id/indicator/26/413/1/-metode-baru-indeks-pembangunan-manusia.html
+
+------------------------------------------------------------------------
+CARA VERIFIKASI
+------------------------------------------------------------------------
+1. Buka www.bps.go.id, lalu cari nama variabel di atas
+   (mis. "Umur Harapan Hidup menurut Kabupaten/Kota").
+2. Pilih level Kabupaten/Kota dan tahun yang sesuai.
+3. Cocokkan angka salah satu daerah dengan yang ada di dataset,
+   contoh: Kota Banda Aceh -> UHH 72,17 ; Pengeluaran 18.356 (ribu rupiah).
+
+Catatan: Kolom "kluster / Kategori Kerentanan" pada file hasil BUKAN data BPS,
+melainkan label yang dihasilkan oleh algoritma K-Means (unsupervised learning).
+========================================================================
